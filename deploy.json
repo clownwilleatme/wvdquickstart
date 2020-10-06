@@ -74,7 +74,23 @@
                 "description": "Please leave this as '[utcNow()]', as this is used to generate unique names in the deployment. This is a requirement for resources like a keyvault or storage account."
             },
             "defaultValue": "[utcNow()]"
-        }
+        },
+    "wvdMetadataLocation": {
+      "type": "string",
+      "allowedValues": [
+        "eastus",
+        "eastus2",
+        "centralus",
+        "northcentralus",
+        "southcentralus",
+        "westcentralus",
+        "westus",
+        "westus2"
+    ],"defaultValue": "westus",
+      "metadata": {
+        "description": "Location for WVD metadata resources, which may be limited compared to other resources."
+      }
+    }
     },
     "variables": {
         "_artifactsLocation": "https://raw.githubusercontent.com/Eighty20Solutions/wvdquickstart/master",
@@ -83,6 +99,7 @@
         "existingDomainName": "[split(parameters('DomainJoinAccountUPN'), '@')[1]]",
         "identityName": "WVDServicePrincipal",
         "location": "[resourcegroup().location]",
+        "wvdMetadataLocation": "[parameters('wvdMetadataLocation')]",
         "rgName": "[resourcegroup().name]",
         "keyvaultName": "[concat('keyvault', parameters('utcValue'))]",
         "assetsName": "[concat('assets', toLower(skip(parameters('utcValue'), 4)))]",
@@ -127,6 +144,10 @@
             {
                 "name": "location",
                 "value": "[concat('\"',variables('location'),'\"')]"
+            },
+            {
+                "name": "wvdMetadataLocation",
+                "value": "[concat('\"',variables('wvdMetadataLocation'),'\"')]"
             },
             {
                 "name": "adminUsername",

@@ -109,6 +109,10 @@
                 "value": "[concat('\"',variables('location'),'\"')]"
             },
             {
+                "name": "wvdMetadataLocation",
+                "value": "[concat('\"',variables('wvdMetadataLocation'),'\"')]"
+            },
+            {
                 "name": "adminUsername",
                 "value": "[concat('\"',variables('domainUsername'),'\"')]"
             },

@@ -26,6 +26,7 @@ $principalId = Get-AutomationVariable -Name 'principalId'
 $orgName = Get-AutomationVariable -Name 'orgName'
 $projectName = Get-AutomationVariable -Name 'projectName'
 $location = Get-AutomationVariable -Name 'location'
+$wvdMetadataLocation = Get-AutomationVariable -Name 'wvdMetadataLocation'
 $adminUsername = Get-AutomationVariable -Name 'adminUsername'
 $domainName = Get-AutomationVariable -Name 'domainName'
 $keyvaultName = Get-AutomationVariable -Name 'keyvaultName'
@@ -311,6 +312,7 @@ $downloadUrl = $($fileUri + "/QS-WVD/variables.template.yml")
 $content = (New-Object System.Net.WebClient).DownloadString($downloadUrl)
 
 $content = $content.Replace("[location]", $location)
+$content = $content.Replace("[wvdMetadataLocation]", $wvdMetadataLocation)
 $content = $content.Replace("[adminUsername]", $adminUsername)
 $content = $content.Replace("[domainName]", $domainName)
 $content = $content.Replace("[keyVaultName]", $keyvaultName)

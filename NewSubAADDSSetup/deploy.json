@@ -11,7 +11,7 @@
         "azureAdminUpn": {
             "type": "string",
             "metadata": {
-                "description": "The UPN of the account that you're currently logged in with on the Azure Portal. This account should at least have the 'contributor' or 'owner' role on the subscription level for the deployment to succeed. The template will fail if you enter a user account that requires MFA."
+                "description": "The UPN of the account that you're currently logged in with on the Azure Portal in the format account@domain.com. This account should at least have the 'contributor' or 'owner' role on the subscription level for the deployment to succeed. The template will fail if you enter a user account that requires MFA. Additionally, you must be signed in to Azure using the same credentails when you start the deployment."
             }
         },
         "azureAdminPassword": {
@@ -33,10 +33,17 @@
                 "description": "Please leave this value as '[utcNow()]', as this is used to generate unique names in the deployment. This is a requirement for resources like a keyvault or storage account."
             },
             "defaultValue": "[utcNow()]"
-        }
+        },
+     "wvdMetadataLocation": {
+      "type": "string",
+      "defaultValue": "westus",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    }
     },
     "variables": {
-         "_artifactsLocation": "https://raw.githubusercontent.com/stgeorgi/wvdquickstart/master",
+         "_artifactsLocation": "https://raw.githubusercontent.com/Eighty20Solutions/wvdquickstart/master",
         "AdminPasswordSecret": "adminPassword",
         "domainUsername": "domainJoiner",
         "vnetName": "aaddsVnet",
@@ -46,6 +53,7 @@
         "domainName": "[parameters('domainName')]",
         "identityName": "WVDServicePrincipal",
         "location": "[resourcegroup().location]",
+        "wvdMetadataLocation": "[parameters('wvdMetadataLocation')]",
         "rgName": "[resourcegroup().name]",
         "keyvaultName": "[concat('keyvault', parameters('utcValue'))]",
         "assetsName": "[concat('assets', toLower(skip(parameters('utcValue'), 4)))]",

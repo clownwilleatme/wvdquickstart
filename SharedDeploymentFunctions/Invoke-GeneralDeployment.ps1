@@ -4,6 +4,7 @@ function Invoke-GeneralDeployment {
   param(
     [string] $resourcegroupName,
     [string] $location,
+    [string] $wvdMetadataLocation,
     [string] $moduleName,
     [string] $moduleVersion,
     [string] $parameterFilePath,

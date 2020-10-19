@@ -578,7 +578,6 @@
                 "location": "[variables('location')]",
                 "name": "[variables('subnetName')]",
                 "dependsOn": ["[variables('vnetName')]"],
-                "tags": "[parameters('resourceTags')]",
                 "properties": {
                     "addressPrefix": "[variables('subnetAddressPrefix')]",
                     "networkSecurityGroup": {

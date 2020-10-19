@@ -42,11 +42,12 @@ $identityApproach = Get-AutomationVariable -Name 'identityApproach'
 $notificationEmail = Get-AutomationVariable -Name 'notificationEmail'
 
 #Testing to see if the metadata location reaches this point
+write-output "Writing the value of automation variables..."
+write-output $location
 write-output $wvdMetadataLocation
 
-
-write-output "Starting 45 minutes of sleep to allow for domain to start running, which typically takes 30-40 minutes."
 #Debug only so we can skip this, do not commit this to the main branch
+#write-output "Starting 45 minutes of sleep to allow for domain to start running, which typically takes 30-40 minutes."
 #start-sleep -Seconds 2700
 
 # Download files required for this script from github ARMRunbookScripts/static folder

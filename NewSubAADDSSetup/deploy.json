@@ -84,7 +84,7 @@
         "jobGuid2": "[guid(toLower(uniquestring(variables('identityName'), subscription().id, parameters('utcValue'),'devOpsSetup')))]",
         "devOpsName": "[concat('WVDQuickStartOrg', skip(parameters('utcValue'), 9))]",   
         "devOpsProjectName": "[concat('WVDQuickStartProj', skip(parameters('utcValue'), 9))]",
-        "tags": "[parameters('resourceTags')]",
+        "tags": "[string(parameters('resourceTags'))]",
         "targetGroup": "WVDTestUsers",
         "automationVariables": [
             {

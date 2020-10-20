@@ -40,6 +40,7 @@ $targetGroup = Get-AutomationVariable -Name 'targetGroup'
 $AutomationAccountName = Get-AutomationVariable -Name 'AccountName'
 $identityApproach = Get-AutomationVariable -Name 'identityApproach'
 $notificationEmail = Get-AutomationVariable -Name 'notificationEmail'
+$tags = Get-AutomationVariable -Name 'tags'
 
 write-output "Starting 45 minutes of sleep to allow for domain to start running, which typically takes 30-40 minutes."
 start-sleep -Seconds 2700
@@ -321,6 +322,7 @@ $content = $content.Replace("[resourceGroupName]", $ResourceGroupName)
 $content = $content.Replace("[profilesStorageAccountName]", $profilesStorageAccountName)
 $content = $content.Replace("[autoAccountName]", $AutomationAccountName)
 $content = $content.Replace("[identityApproach]", $identityApproach)
+$content = $content.Replace("[tags]", $tags)
 $content = $content.Replace('"', '')
 write-output $content
 
@@ -339,6 +341,7 @@ $parameters = $parameters.Replace("[tenantId]", $tenant)
 $parameters = $parameters.Replace("[subscriptionId]", $subscriptionId)
 $parameters = $parameters.Replace("[location]", $location)
 $parameters = $parameters.Replace("[wvdMetadataLocation]", $wvdMetadataLocation)
+$parameters = $content.Replace("[tags]", $tags)
 $parameters = $parameters.Replace("[adminUsername]", $adminUsername)
 $parameters = $parameters.Replace("[domainName]", $domainName)
 $parameters = $parameters.Replace("[keyVaultName]", $keyvaultName)

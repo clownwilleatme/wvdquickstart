@@ -39,6 +39,7 @@ $targetGroup = Get-AutomationVariable -Name 'targetGroup'
 $AutomationAccountName = Get-AutomationVariable -Name 'AccountName'
 $identityApproach = Get-AutomationVariable -Name 'identityApproach'
 $notificationEmail = Get-AutomationVariable -Name 'notificationEmail'
+$tags = Get-AutomationVariable -Name 'tags'
 
 # Download files required for this script from github ARMRunbookScripts/static folder
 $FileNames = "msft-wvd-saas-api.zip,msft-wvd-saas-web.zip,AzureModules.zip"
@@ -325,6 +326,7 @@ $parameters = $parameters.Replace("[resourceGroupName]", $ResourceGroupName)
 $parameters = $parameters.Replace("[principalIds]", $principalIds)
 $parameters = $parameters.Replace("[targetGroup]", $targetGroup)
 $parameters = $parameters.Replace("[identityApproach]", $identityApproach)
+$parameters = $parameters.Replace("[tags]", $tags)
 $parameters = $parameters.Replace('"', "'")
 write-output $parameters
 

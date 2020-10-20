@@ -49,7 +49,7 @@
             "value": false
         },
         "tags": {
-            "value": {}
+            "value": "[tags]"
         }
     }
 }

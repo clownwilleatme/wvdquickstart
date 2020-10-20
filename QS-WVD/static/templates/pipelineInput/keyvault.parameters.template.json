@@ -48,7 +48,7 @@
             "value": false
         },
         "tags": {
-            "value": {}
+            "value": "[tags]"
         },
         "enableSoftDelete": {
             "value": false

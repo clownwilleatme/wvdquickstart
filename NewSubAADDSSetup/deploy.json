@@ -84,6 +84,7 @@
         "jobGuid2": "[guid(toLower(uniquestring(variables('identityName'), subscription().id, parameters('utcValue'),'devOpsSetup')))]",
         "devOpsName": "[concat('WVDQuickStartOrg', skip(parameters('utcValue'), 9))]",   
         "devOpsProjectName": "[concat('WVDQuickStartProj', skip(parameters('utcValue'), 9))]",
+        "tags": "[parameters('resourceTags')]",
         "targetGroup": "WVDTestUsers",
         "automationVariables": [
             {
@@ -161,6 +162,10 @@
             {
                 "name": "notificationEmail",
                 "value": "[concat('\"',parameters('optionalNotificationEmail'),'\"')]"
+            },
+            {
+                "name": "tags",
+                "value": "[concat('\"',variables('tags'),'\"')]"
             }
         ],   
         "domainServicesNSGName": "[concat(variables('subnetName'), '-nsg')]",

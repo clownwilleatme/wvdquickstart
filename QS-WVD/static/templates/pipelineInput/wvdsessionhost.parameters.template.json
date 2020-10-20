@@ -107,7 +107,7 @@
             "value": false
         },
         "tags": {
-            "value": {}
+            "value": "[tags]"
         },
         "windowsScriptExtensionFileData": {
             "value": [

@@ -29,7 +29,7 @@
             ]
         },
         "location": {
-            "value": "[location]"
+            "value": "[wvdMetadataLocation]"
         },
         "appGroupName": {
             "value": "[appGroupName]"

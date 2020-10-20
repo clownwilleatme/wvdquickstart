@@ -6,7 +6,7 @@
             "value": "[workSpaceName]"
         },
         "location": {
-            "value": "[location]"
+            "value": "[wvdMetadataLocation]"
         },
         "appGroupResourceIds": {
             "value": [

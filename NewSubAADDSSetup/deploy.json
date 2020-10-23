@@ -62,7 +62,7 @@
     }
     },
     "variables": {
-         "_artifactsLocation": "https://raw.githubusercontent.com/Eighty20Solutions/wvdquickstart/debugging",
+         "_artifactsLocation": "https://raw.githubusercontent.com/Eighty20Solutions/wvdquickstart/master",
         "AdminPasswordSecret": "adminPassword",
         "domainUsername": "domainJoiner",
         "vnetName": "aaddsVnet",

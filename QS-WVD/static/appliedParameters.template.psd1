@@ -10,7 +10,6 @@
     location                              = "[location]"            # Location in which WVD resources will be deployed
     resourceGroupName                     = "[resourceGroupName]"   # Name of the resource group in which WVD resources will be deployed
     wvdMetadataLocation                   = "[wvdMetadataLocation]" # US Location in which WVD metadata will be deployed, only specific US locations are supported at this time  
-    tags                                  = "[tags]"                # Azure resource tags for resources being deployed by Azure DevOps automation  
     #######################
 
     # Key Vault related #

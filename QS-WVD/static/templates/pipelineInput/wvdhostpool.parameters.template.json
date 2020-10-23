@@ -52,9 +52,6 @@
         },
         "lockForDeletion": {
             "value": false
-        },
-        "tags": {
-            "value": "[tags]"
         }
     }
 }

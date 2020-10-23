@@ -174,3 +174,14 @@ Add-AzureADGroupMember -ObjectId $GroupObjectId.ObjectId -RefObjectId $domainUse
 $identity = Get-AzUserAssignedIdentity -ResourceGroupName $ResourceGroupName -Name "WVDServicePrincipal"
 New-AzRoleAssignment -RoleDefinitionName "Contributor" -ObjectId $identity.PrincipalId -Scope "/subscriptions/$subscriptionId"
 Start-Sleep -Seconds 5
+
+
+# Set up an Azure Policy at the resource group level for the resources to inherit tags from the parent resource group
+
+$resourcegroup = Get-AzResource -Name $ResourceGroupName -ResourceGroup $ResourceGroupName
+$definition = New-AzPolicyDefinition -Name "inherit-resourcegroup-tag-if-missing" -DisplayName "Inherit a tag from the resource group if missing" -description "Adds the specified tag with its value from the parent resource group when any resource missing this tag is created or updated. Existing resources can be remediated by triggering a remediation task. If the tag exists with a different value it will not be changed." -Policy 'https://raw.githubusercontent.com/Azure/azure-policy/master/samples/Tags/inherit-resourcegroup-tag-if-missing/azurepolicy.rules.json' -Parameter 'https://raw.githubusercontent.com/Azure/azure-policy/master/samples/Tags/inherit-resourcegroup-tag-if-missing/azurepolicy.parameters.json' -Mode Indexed
+New-AzPolicyAssignment -Name "Inherit the resource group tags for WVD for all contained resources" -Scope $resourcegroup.ResourceId  -tagName $resourceTags -PolicyDefinition $definition
+
+# Tag the resource group with the user specified tags
+
+New-AzTag -ResourceId $resourcegroup.id -Tag $resourceTags

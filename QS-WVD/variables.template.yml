@@ -20,9 +20,6 @@ variables:
 - name: wvdMetadataLocation 
   value: "[wvdMetadataLocation]"
 
-- name: tags 
-  value: "[tags]"
-
 #endregion
 
 #######################

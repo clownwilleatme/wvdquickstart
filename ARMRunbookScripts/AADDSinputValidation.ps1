@@ -16,6 +16,7 @@ $SubscriptionId = Get-AutomationVariable -Name 'subscriptionid'
 $ResourceGroupName = Get-AutomationVariable -Name 'ResourceGroupName'
 $fileURI = Get-AutomationVariable -Name 'fileURI'
 $domainName = Get-AutomationVariable -Name 'domainName'
+$resourceTags = Get-AutomationVariable -Name 'tags'
 
 # Download files required for this script from github ARMRunbookScripts/static folder
 $FileNames = "msft-wvd-saas-api.zip,msft-wvd-saas-web.zip,AzureModules.zip"
@@ -178,9 +179,9 @@ Start-Sleep -Seconds 5
 
 # Set up an Azure Policy at the resource group level for the resources to inherit tags from the parent resource group
 
-$resourcegroup = Get-AzResource -Name $ResourceGroupName -ResourceGroup $ResourceGroupName
+$resourcegroup = Get-AzResourceGroup -Name $ResourceGroupName
 $definition = New-AzPolicyDefinition -Name "inherit-resourcegroup-tag-if-missing" -DisplayName "Inherit a tag from the resource group if missing" -description "Adds the specified tag with its value from the parent resource group when any resource missing this tag is created or updated. Existing resources can be remediated by triggering a remediation task. If the tag exists with a different value it will not be changed." -Policy 'https://raw.githubusercontent.com/Azure/azure-policy/master/samples/Tags/inherit-resourcegroup-tag-if-missing/azurepolicy.rules.json' -Parameter 'https://raw.githubusercontent.com/Azure/azure-policy/master/samples/Tags/inherit-resourcegroup-tag-if-missing/azurepolicy.parameters.json' -Mode Indexed
-New-AzPolicyAssignment -Name "Inherit the resource group tags for WVD for all contained resources" -Scope $resourcegroup.ResourceId  -tagName $resourceTags -PolicyDefinition $definition
+New-AzPolicyAssignment -Name "Inherit the resource group tags for all WVD resources" -Scope $resourcegroup.ResourceId -tagName $resourceTags -PolicyDefinition $definition -AssignIdentity -Location australiaeast
 
 # Tag the resource group with the user specified tags
 

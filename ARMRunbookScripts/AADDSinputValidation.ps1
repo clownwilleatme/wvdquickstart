@@ -14,8 +14,7 @@ Additionally, this script assigns the subscription Contributor role to the WVDSe
 #Initializing variables from automation account
 $SubscriptionId = Get-AutomationVariable -Name 'subscriptionid'
 $ResourceGroupName = Get-AutomationVariable -Name 'ResourceGroupName'
-$fileURI = Get-AutomationVariable -Name 'fileURI'
-$domainName = Get-AutomationVariable -Name 'domainName'
+
 
 # Download files required for this script from github ARMRunbookScripts/static folder
 $FileNames = "msft-wvd-saas-api.zip,msft-wvd-saas-web.zip,AzureModules.zip"
@@ -124,53 +123,12 @@ foreach($resourceProvider in $wvdResourceProviderName) {
 }
 #endregion
 
-$PasswordProfile = New-Object -TypeName Microsoft.Open.AzureAD.Model.PasswordProfile
+# Set up an Azure Policy at the resource group level for the resources to inherit tags from the parent resource group
 
-$username = "tempUser@" + $domainName
+$resourcegroup = Get-AzResourceGroup -Name $ResourceGroupName
+$definition = New-AzPolicyDefinition -Name "inherit-resourcegroup-tag-if-missing" -DisplayName "Inherit a tag from the resource group if missing" -description "Adds the specified tag with its value from the parent resource group when any resource missing this tag is created or updated. Existing resources can be remediated by triggering a remediation task. If the tag exists with a different value it will not be changed." -Policy 'https://raw.githubusercontent.com/Azure/azure-policy/master/samples/Tags/inherit-resourcegroup-tag-if-missing/azurepolicy.rules.json' -Parameter 'https://raw.githubusercontent.com/Azure/azure-policy/master/samples/Tags/inherit-resourcegroup-tag-if-missing/azurepolicy.parameters.json' -Mode Indexed
+New-AzPolicyAssignment -Name "Inherit the resource group tags for all WVD resources" -Scope $resourcegroup.ResourceId -tagName $resourceTags -PolicyDefinition $definition -AssignIdentity -Location australiaeast
 
-$BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($AzCredentials.password)
-$UnsecurePassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-$PasswordProfile.Password = $UnsecurePassword
-$PasswordProfile.ForceChangePasswordNextLogin = $False
+# Tag the resource group with the user specified tags
 
-New-AzureADUser -DisplayName $username -PasswordProfile $PasswordProfile -UserPrincipalName $username -AccountEnabled $true -MailNickName "tempUser"
-
-$domainUser = Get-AzureADUser -Filter "UserPrincipalName eq '$($username)'" | Select-Object ObjectId
-# Fetch user to assign to role
-$roleMember = Get-AzureADUser -ObjectId $domainUser.ObjectId
-
-# Fetch User Account Administrator role instance
-$role = Get-AzureADDirectoryRole | Where-Object {$_.displayName -eq 'Company Administrator'}
-# If role instance does not exist, instantiate it based on the role template
-if ($role -eq $null) {
-    # Instantiate an instance of the role template
-    $roleTemplate = Get-AzureADDirectoryRoleTemplate | Where-Object {$_.displayName -eq 'Company Administrator'}
-    Enable-AzureADDirectoryRole -RoleTemplateId $roleTemplate.ObjectId
-    # Fetch User Account Administrator role instance again
-    $role = Get-AzureADDirectoryRole | Where-Object {$_.displayName -eq 'Company Administrator'}
-}
-# Add user to role
-Add-AzureADDirectoryRoleMember -ObjectId $role.ObjectId -RefObjectId $roleMember.ObjectId
-# Fetch role membership for role to confirm
-Get-AzureADDirectoryRoleMember -ObjectId $role.ObjectId | Get-AzureADUser
-
-New-AzADServicePrincipal -ApplicationId "2565bd9d-da50-47d4-8b85-4c97f669dc36"
-
-# Create domain controller admin group
-New-AzureADGroup -DisplayName "AAD DC Administrators" `
-                 -Description "Delegated group to administer Azure AD Domain Services" `
-                 -SecurityEnabled $true -MailEnabled $false `
-                 -MailNickName "AADDCAdministrators"
-
-# Add user to "AAD DC Administrators" group
-
-# First, retrieve the object ID of the newly created 'AAD DC Administrators' group.
-$GroupObjectId = Get-AzureADGroup -Filter "DisplayName eq 'AAD DC Administrators'" | Select-Object ObjectId
-
-# Add the user to the 'AAD DC Administrators' group.
-Add-AzureADGroupMember -ObjectId $GroupObjectId.ObjectId -RefObjectId $domainUser.ObjectId
-
-# Grant managed identity contributor role on subscription level
-$identity = Get-AzUserAssignedIdentity -ResourceGroupName $ResourceGroupName -Name "WVDServicePrincipal"
-New-AzRoleAssignment -RoleDefinitionName "Contributor" -ObjectId $identity.PrincipalId -Scope "/subscriptions/$subscriptionId"
-Start-Sleep -Seconds 5
+New-AzTag -ResourceId $resourcegroup.ResourceId -Tag $resourceTags

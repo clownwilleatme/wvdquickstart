@@ -185,4 +185,4 @@ New-AzPolicyAssignment -Name "Inherit the resource group tags for all WVD resour
 
 # Tag the resource group with the user specified tags
 
-New-AzTag -ResourceId $resourcegroup.id -Tag $resourceTags
+New-AzTag -ResourceId $resourcegroup.ResourceId -Tag $resourceTags

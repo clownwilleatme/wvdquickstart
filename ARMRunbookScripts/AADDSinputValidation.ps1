@@ -15,9 +15,10 @@ Additionally, this script assigns the subscription Contributor role to the WVDSe
 $SubscriptionId = Get-AutomationVariable -Name 'subscriptionid'
 $ResourceGroupName = Get-AutomationVariable -Name 'ResourceGroupName'
 $fileURI = Get-AutomationVariable -Name 'fileURI'
+$resourceTags = Get-AutomationVariable -Name 'tags'
 
 
-Write-Output "Read Variables $SubscriptionId $ResourceGroupName $fileURI"
+Write-Output "Read Variables $SubscriptionId $ResourceGroupName $fileURI $resourceTags"
 
 # Download files required for this script from github ARMRunbookScripts/static folder
 $FileNames = "msft-wvd-saas-api.zip,msft-wvd-saas-web.zip,AzureModules.zip"
@@ -130,6 +131,9 @@ foreach($resourceProvider in $wvdResourceProviderName) {
 # Set up an Azure Policy at the resource group level for the resources to inherit tags from the parent resource group
 
 $resourcegroup = Get-AzResourceGroup -Name $ResourceGroupName
+
+Write-Output  $resourcegroup.ResourceId
+
 $definition = New-AzPolicyDefinition -Name "inherit-resourcegroup-tag-if-missing" -DisplayName "Inherit a tag from the resource group if missing" -description "Adds the specified tag with its value from the parent resource group when any resource missing this tag is created or updated. Existing resources can be remediated by triggering a remediation task. If the tag exists with a different value it will not be changed." -Policy 'https://raw.githubusercontent.com/Azure/azure-policy/master/samples/Tags/inherit-resourcegroup-tag-if-missing/azurepolicy.rules.json' -Parameter 'https://raw.githubusercontent.com/Azure/azure-policy/master/samples/Tags/inherit-resourcegroup-tag-if-missing/azurepolicy.parameters.json' -Mode Indexed
 New-AzPolicyAssignment -Name "Inherit the resource group tags for all WVD resources" -Scope $resourcegroup.ResourceId -tagName $resourceTags -PolicyDefinition $definition -AssignIdentity -Location australiaeast
 

@@ -1,0 +1,104 @@
+[33mcommit 3b37199e50960d70bfc9c7a113164df6e3203c33[m[33m ([m[1;36mHEAD -> [m[1;32mau-localisation[m[33m, [m[1;31morigin/au-localisation[m[33m)[m
+Author: Sayan Ghosh <sayan.jucse@gmail.com>
+Date:   Tue Oct 27 09:07:56 2020 +1100
+
+    Code quality suggestions fix
+
+[1mdiff --git a/ARMRunbookScripts/AADDSdevopssetup.ps1 b/ARMRunbookScripts/AADDSdevopssetup.ps1[m
+[1mindex c5fc9e4..ea2e3d0 100644[m
+[1m--- a/ARMRunbookScripts/AADDSdevopssetup.ps1[m
+[1m+++ b/ARMRunbookScripts/AADDSdevopssetup.ps1[m
+[36m@@ -110,7 +110,7 @@[m [m$roleMember = Get-AzureADUser -ObjectId $domainUser.ObjectId[m
+ # Fetch User Account Administrator role instance[m
+ $role = Get-AzureADDirectoryRole | Where-Object {$_.displayName -eq 'Company Administrator'}[m
+ # If role instance does not exist, instantiate it based on the role template[m
+[31m-if ($role -eq $null) {[m
+[32m+[m[32mif ($null -eq $role) {[m
+     # Instantiate an instance of the role template[m
+     $roleTemplate = Get-AzureADDirectoryRoleTemplate | Where-Object {$_.displayName -eq 'Company Administrator'}[m
+     Enable-AzureADDirectoryRole -RoleTemplateId $roleTemplate.ObjectId[m
+[36m@@ -130,7 +130,7 @@[m [mAdd-AzureADGroupMember -ObjectId $GroupObjectId.ObjectId -RefObjectId $domainUse[m
+ [m
+ # Get the context[m
+ $context = Get-AzContext[m
+[31m-if ($context -eq $null)[m
+[32m+[m[32mif ($null -eq $context)[m
+ {[m
+ 	Write-Error "Please authenticate to Azure & Azure AD using Login-AzAccount and Connect-AzureAD cmdlets and then run this script"[m
+ 	exit[m
+[36m@@ -274,12 +274,12 @@[m [mif ($identityApproach -eq "AD") {[m
+       $principalIds = (Get-AzureADGroup -SearchString $targetGroup).objectId[m
+       $currentTry++[m
+       Start-Sleep -Seconds 10[m
+[31m-  } while ($currentTry -le 180 -and ($principalIds -eq $null))[m
+[32m+[m[32m  } while ($currentTry -le 180 -and ($null -eq $principalIds))[m
+ }[m
+ [m
+ # In both AD and Azure AD DS case, the user group should now exist in Azure. Throw an error of the group is not found.[m
+ $principalIds = (Get-AzureADGroup -SearchString $targetGroup).objectId[m
+[31m-if ($principalIds -eq $null) {[m
+[32m+[m[32mif ($null -eq $principalIds) {[m
+   Write-Error "Did not find user group $targetGroup. Please check if the user group creation completed successfully."[m
+   throw "Did not find user group $targetGroup. Please check if the user group creation completed successfully."[m
+ }[m
+[36m@@ -300,9 +300,9 @@[m [mdo {[m
+     $response = Invoke-RestMethod -Uri $url -Headers @{Authorization = "Basic $token"} -Method Get[m
+     write-output $response[m
+     $currentTry++[m
+[31m-} while ($currentTry -le 30 -and ($response.value.ObjectId -eq $null))[m
+[32m+[m[32m} while ($currentTry -le 30 -and ($null -eq $response.value.ObjectId))[m
+ [m
+[31m-if ($response.value.ObjectId -eq $null) {[m
+[32m+[m[32mif ($null -eq $response.value.ObjectId) {[m
+   throw "Pushing repository to DevOps timed out. Please try again later."[m
+ }[m
+ [m
+[1mdiff --git a/ARMRunbookScripts/devopssetup.ps1 b/ARMRunbookScripts/devopssetup.ps1[m
+[1mindex b75ee8f..bc31be7 100644[m
+[1m--- a/ARMRunbookScripts/devopssetup.ps1[m
+[1m+++ b/ARMRunbookScripts/devopssetup.ps1[m
+[36m@@ -92,7 +92,7 @@[m [mSelect-AzSubscription -SubscriptionId $SubscriptionId[m
+ [m
+ # Get the context[m
+ $context = Get-AzContext[m
+[31m-if ($context -eq $null)[m
+[32m+[m[32mif ($null -eq $context)[m
+ {[m
+ 	Write-Error "Please authenticate to Azure & Azure AD using Login-AzAccount and Connect-AzureAD cmdlets and then run this script"[m
+ 	exit[m
+[36m@@ -240,12 +240,12 @@[m [mif ($identityApproach -eq "AD") {[m
+       $principalIds = (Get-AzureADGroup -SearchString $targetGroup).objectId[m
+       $currentTry++[m
+       Start-Sleep -Seconds 10[m
+[31m-  } while ($currentTry -le 180 -and ($principalIds -eq $null))[m
+[32m+[m[32m  } while ($currentTry -le 180 -and ($null -eq $principalIds))[m
+ }[m
+ [m
+ # In both AD and Azure AD DS case, the user group should now exist in Azure. Throw an error of the group is not found.[m
+ $principalIds = (Get-AzureADGroup -SearchString $targetGroup).objectId[m
+[31m-if ($principalIds -eq $null) {[m
+[32m+[m[32mif ($null -eq $principalIds) {[m
+   Write-Error "Did not find user group $targetGroup. Please check if the user group creation completed successfully."[m
+   throw "Did not find user group $targetGroup. Please check if the user group creation completed successfully."[m
+ }[m
+[36m@@ -258,7 +258,7 @@[m [mWrite-Output "Found user group $targetGroup with principal Id $principalIds"[m
+ # Removing the Custom Script Extension from domain controller VM. When re-running deployment, this means it will re-run the CSE, which can be used to create additional users for example[m
+ if ($identityApproach -eq "AD") {[m
+ 	$VMCustomScriptExtension = Get-AzVMCustomScriptExtension -ResourceGroupName $virtualNetworkResourceGroupName -VMName $computerName -Name "userCreation"[m
+[31m-	if ($VMCustomScriptExtension -ne $null) {[m
+[32m+[m	[32mif ($null -ne $VMCustomScriptExtension) {[m
+ 	  Write-Output "In case AD is used, removing the userCreation CSE from domain controller VM..."[m
+ 	  Remove-AzVMCustomScriptExtension -ResourceGroupName $virtualNetworkResourceGroupName -VMName $computerName -Name "userCreation" -Force[m
+ 	  Write-Output "userCreation CSE removed."[m
+[36m@@ -276,9 +276,9 @@[m [mdo {[m
+     $response = Invoke-RestMethod -Uri $url -Headers @{Authorization = "Basic $token"} -Method Get[m
+     write-output $response[m
+     $currentTry++[m
+[31m-} while ($currentTry -le 30 -and ($response.value.ObjectId -eq $null))[m
+[32m+[m[32m} while ($currentTry -le 30 -and ($null -eq $response.value.ObjectId))[m
+ [m
+[31m-if ($response.value.ObjectId -eq $null) {[m
+[32m+[m[32mif ($null -eq $response.value.ObjectId) {[m
+   throw "Pushing repository to DevOps timed out. Please try again later."[m
+ }[m
+ [m

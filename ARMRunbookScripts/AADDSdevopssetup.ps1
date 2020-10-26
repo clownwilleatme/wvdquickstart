@@ -110,7 +110,7 @@ $roleMember = Get-AzureADUser -ObjectId $domainUser.ObjectId
 # Fetch User Account Administrator role instance
 $role = Get-AzureADDirectoryRole | Where-Object {$_.displayName -eq 'Company Administrator'}
 # If role instance does not exist, instantiate it based on the role template
-if ($role -eq $null) {
+if ($null -eq $role) {
     # Instantiate an instance of the role template
     $roleTemplate = Get-AzureADDirectoryRoleTemplate | Where-Object {$_.displayName -eq 'Company Administrator'}
     Enable-AzureADDirectoryRole -RoleTemplateId $roleTemplate.ObjectId
@@ -130,7 +130,7 @@ Add-AzureADGroupMember -ObjectId $GroupObjectId.ObjectId -RefObjectId $domainUse
 
 # Get the context
 $context = Get-AzContext
-if ($context -eq $null)
+if ($null -eq $context)
 {
 	Write-Error "Please authenticate to Azure & Azure AD using Login-AzAccount and Connect-AzureAD cmdlets and then run this script"
 	exit
@@ -274,12 +274,12 @@ if ($identityApproach -eq "AD") {
       $principalIds = (Get-AzureADGroup -SearchString $targetGroup).objectId
       $currentTry++
       Start-Sleep -Seconds 10
-  } while ($currentTry -le 180 -and ($principalIds -eq $null))
+  } while ($currentTry -le 180 -and ($null -eq $principalIds))
 }
 
 # In both AD and Azure AD DS case, the user group should now exist in Azure. Throw an error of the group is not found.
 $principalIds = (Get-AzureADGroup -SearchString $targetGroup).objectId
-if ($principalIds -eq $null) {
+if ($null -eq $principalIds) {
   Write-Error "Did not find user group $targetGroup. Please check if the user group creation completed successfully."
   throw "Did not find user group $targetGroup. Please check if the user group creation completed successfully."
 }
@@ -300,9 +300,9 @@ do {
     $response = Invoke-RestMethod -Uri $url -Headers @{Authorization = "Basic $token"} -Method Get
     write-output $response
     $currentTry++
-} while ($currentTry -le 30 -and ($response.value.ObjectId -eq $null))
+} while ($currentTry -le 30 -and ($null -eq $response.value.ObjectId))
 
-if ($response.value.ObjectId -eq $null) {
+if ($null -eq $response.value.ObjectId) {
   throw "Pushing repository to DevOps timed out. Please try again later."
 }
 

@@ -64,7 +64,7 @@ if ($identityApproach -eq 'Azure AD DS') {
 
 	$GroupObjectId = Get-AzureADGroup -Filter "DisplayName eq 'AAD DC Administrators'" | Select-Object ObjectId
 	$groupMember = Get-AzureADGroupMember -ObjectId $GroupObjectId.ObjectId | Where-Object {$_.UserPrincipalName -eq $domainCredentials.username}
-	if ($groupMember -eq $null) {
+	if ($null -eq $groupMember) {
 		Write-Error "Entered domain join credentials correspond to a user that is not a member of the AAD DC Administrators group."
 		Throw 
 	}
@@ -84,7 +84,7 @@ Connect-AzAccount -Environment 'AzureCloud' -Credential $AzCredentials
 Select-AzSubscription -SubscriptionId $SubscriptionId
 
 $context = Get-AzContext
-if ($context -eq $null)
+if ($null -eq $context)
 {
 	Write-Error "Please authenticate to Azure & Azure AD using Login-AzAccount and Connect-AzureAD cmdlets and then run this script"
 	throw

@@ -53,7 +53,7 @@ Connect-AzAccount -Environment 'AzureCloud' -Credential $AzCredentials
 Select-AzSubscription -SubscriptionId $SubscriptionId
 
 $context = Get-AzContext
-if ($context -eq $null)
+if ($null -eq $context)
 {
 	Write-Error "Please authenticate to Azure & Azure AD using Login-AzAccount and Connect-AzureAD cmdlets and then run this script"
 	throw
@@ -143,7 +143,7 @@ $roleMember = Get-AzureADUser -ObjectId $domainUser.ObjectId
 # Fetch User Account Administrator role instance
 $role = Get-AzureADDirectoryRole | Where-Object {$_.displayName -eq 'Company Administrator'}
 # If role instance does not exist, instantiate it based on the role template
-if ($role -eq $null) {
+if ($null -eq $role) {
     # Instantiate an instance of the role template
     $roleTemplate = Get-AzureADDirectoryRoleTemplate | Where-Object {$_.displayName -eq 'Company Administrator'}
     Enable-AzureADDirectoryRole -RoleTemplateId $roleTemplate.ObjectId

@@ -14,6 +14,7 @@ Additionally, this script assigns the subscription Contributor role to the WVDSe
 #Initializing variables from automation account
 $SubscriptionId = Get-AutomationVariable -Name 'subscriptionid'
 $ResourceGroupName = Get-AutomationVariable -Name 'ResourceGroupName'
+$fileURI = Get-AutomationVariable -Name 'fileURI'
 
 
 # Download files required for this script from github ARMRunbookScripts/static folder

@@ -165,7 +165,7 @@
             },
             {
                 "name": "tags",
-                "value": "[replace(variables('tags'),'\"','\"\"')]"
+                "value": "[variables('tags')]"
             }
         ],   
         "domainServicesNSGName": "[concat(variables('subnetName'), '-nsg')]",

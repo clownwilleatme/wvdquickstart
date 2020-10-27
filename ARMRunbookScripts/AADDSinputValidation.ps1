@@ -53,7 +53,7 @@ Connect-AzAccount -Environment 'AzureCloud' -Credential $AzCredentials
 Select-AzSubscription -SubscriptionId $SubscriptionId
 
 $context = Get-AzContext
-if ($context -eq $null)
+if ($null -eq $context)
 {
 	Write-Error "Please authenticate to Azure & Azure AD using Login-AzAccount and Connect-AzureAD cmdlets and then run this script"
 	throw
@@ -143,7 +143,7 @@ $roleMember = Get-AzureADUser -ObjectId $domainUser.ObjectId
 # Fetch User Account Administrator role instance
 $role = Get-AzureADDirectoryRole | Where-Object {$_.displayName -eq 'Company Administrator'}
 # If role instance does not exist, instantiate it based on the role template
-if ($role -eq $null) {
+if ($null -eq $role) {
     # Instantiate an instance of the role template
     $roleTemplate = Get-AzureADDirectoryRoleTemplate | Where-Object {$_.displayName -eq 'Company Administrator'}
     Enable-AzureADDirectoryRole -RoleTemplateId $roleTemplate.ObjectId
@@ -176,13 +176,26 @@ $identity = Get-AzUserAssignedIdentity -ResourceGroupName $ResourceGroupName -Na
 New-AzRoleAssignment -RoleDefinitionName "Contributor" -ObjectId $identity.PrincipalId -Scope "/subscriptions/$subscriptionId"
 Start-Sleep -Seconds 5
 
+# Handle the tags from Json for various PowerShell commandlets to be able to handle
+#Hashtable tags for Azure cmdlets which would not work with the JObject that the tags are parsed with by default
+[hashtable]$hashTags = $null
+$hashTags = @{}
+[int]$loopindex = 0
+#Enumerate through Json JObject and create String and Hashtable versions
+foreach ($tags in $resourceTags.GetEnumerator()) {
+
+	$hashTags.add((@($resourceTags)[$loopindex].ToString().Split(':'))[0].Trim(),(@($resourceTags)[$loopindex].ToString().Split(':'))[1].Trim())
+  $loopindex++    
+}
 
 # Set up an Azure Policy at the resource group level for the resources to inherit tags from the parent resource group
 
 $resourcegroup = Get-AzResourceGroup -Name $ResourceGroupName
+
+#Write-Output  $resourcegroup.ResourceId
+
 $definition = New-AzPolicyDefinition -Name "inherit-resourcegroup-tag-if-missing" -DisplayName "Inherit a tag from the resource group if missing" -description "Adds the specified tag with its value from the parent resource group when any resource missing this tag is created or updated. Existing resources can be remediated by triggering a remediation task. If the tag exists with a different value it will not be changed." -Policy 'https://raw.githubusercontent.com/Azure/azure-policy/master/samples/Tags/inherit-resourcegroup-tag-if-missing/azurepolicy.rules.json' -Parameter 'https://raw.githubusercontent.com/Azure/azure-policy/master/samples/Tags/inherit-resourcegroup-tag-if-missing/azurepolicy.parameters.json' -Mode Indexed
-New-AzPolicyAssignment -Name "Inherit the resource group tags for all WVD resources" -Scope $resourcegroup.ResourceId -tagName $resourceTags -PolicyDefinition $definition -AssignIdentity -Location australiaeast
+New-AzPolicyAssignment -Name "Inherit the resource group tags for all WVD resources" -Scope $resourcegroup.ResourceId -tagName $hashTags -PolicyDefinition $definition -AssignIdentity -Location australiaeast
 
 # Tag the resource group with the user specified tags
-
-New-AzTag -ResourceId $resourcegroup.ResourceId -Tag $resourceTags
+Set-AzResourceGroup -Name $ResourceGroupName -Tag $hashTags

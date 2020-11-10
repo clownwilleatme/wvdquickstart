@@ -164,6 +164,15 @@ foreach ($config in $azfilesconfig.azfilesconfig) {
             # You can choose to create the identity that represents the storage account as either a Service Logon Account or Computer Account (default parameter value), depends on the AD permission you have and preference. 
             # Run Get-Help Join-AzStorageAccountForAuth for more details on this cmdlet.
 
+            if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+            {
+                LogWarning("NOT RUNNING AS ADMIN")
+            }
+            else
+            {
+                LogWarning("RUNNING AS ADMIN")
+            }
+            
             $split = $config.domainName.Split(".")
             $username = $($split[0] + "\" + $config.domainJoinUsername)
             $scriptPath = $($PSScriptRoot + "\setup.ps1")
@@ -174,12 +183,13 @@ foreach ($config in $azfilesconfig.azfilesconfig) {
             Invoke-Command $scriptBlock -Verbose
 
             LogInfo("Execution policy for the admin user set. Now joining the storage account through another PSExec command... This command takes roughly 5 minutes")
-            $scriptBlock = { .\psexec /accepteula -s -h -u $username -p $domainJoinPassword -c -f "powershell.exe" "$scriptPath -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword" }
-            
-            LogInfo("DEBUG - $username - $domainJoinPassword - $scriptPath -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword")
+            #$scriptBlock = { .\psexec /accepteula -s -h -u $username -p $domainJoinPassword -c -f "powershell.exe" "$scriptPath -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword" }
+            $scriptBlock = { & "$scriptPath" -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword" }
+            #LogInfo("DEBUG - $username - $domainJoinPassword - $scriptPath -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword")
             LogInfo("Scriptblock to execute: $scriptBlock")
-            
             Invoke-Command $scriptBlock -Verbose
+
+            & "$scriptPath" -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword" }
 
             LogInfo("Azure Files Enabled!")
         }

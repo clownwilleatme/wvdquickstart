@@ -174,8 +174,11 @@ foreach ($config in $azfilesconfig.azfilesconfig) {
             Invoke-Command $scriptBlock -Verbose
 
             LogInfo("Execution policy for the admin user set. Now joining the storage account through another PSExec command... This command takes roughly 5 minutes")
-            $scriptBlock = { .\psexec /accepteula -h -u $username -p $domainJoinPassword -c -f "powershell.exe" "$scriptPath -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword" }
+            $scriptBlock = { .\psexec /accepteula -s -h -u $username -p $domainJoinPassword -c -f "powershell.exe" "$scriptPath -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword" }
+            
+            LogInfo("DEBUG - $username - $domainJoinPassword - $scriptPath -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword")
             LogInfo("Scriptblock to execute: $scriptBlock")
+            
             Invoke-Command $scriptBlock -Verbose
 
             LogInfo("Azure Files Enabled!")

@@ -32,8 +32,7 @@ stages:
 
                       New-PipelineParameterSetup -Verbose
                   errorActionPreference: stop
-                  azurePowerShellVersion: OtherVersion
-                  preferredAzurePowerShellVersion: 3.5.0
+                  azurePowerShellVersion: LatestVersion
                 enabled: true
               - task: CopyFiles@2
                 name: Copy_FSLogix_parameters
@@ -111,8 +110,7 @@ stages:
 
                     Invoke-GeneralDeployment @functionInput -Verbose
                   errorActionPreference: stop
-                  azurePowerShellVersion: OtherVersion
-                  preferredAzurePowerShellVersion: 3.5.0
+                  azurePowerShellVersion: LatestVersionVersion
                 enabled: true
               - task: AzurePowerShell@4
                 displayName: "Trigger module [StorageAccounts] post-deployment"
@@ -135,8 +133,7 @@ stages:
 
                     Invoke-StorageAccountPostDeployment @functionInput -Verbose
                   errorActionPreference: stop
-                  azurePowerShellVersion: OtherVersion
-                  preferredAzurePowerShellVersion: 3.5.0
+                  azurePowerShellVersion: LatestVersionVersion
                 enabled: true
 
   - deployment: Deploy_WVDProfilesStorageAccount01
@@ -189,8 +186,7 @@ stages:
 
                     Invoke-GeneralDeployment @functionInput -Verbose
                   errorActionPreference: stop
-                  azurePowerShellVersion: OtherVersion
-                  preferredAzurePowerShellVersion: 3.5.0
+                  azurePowerShellVersion: LatestVersionVersion
                 enabled: true
 
   - deployment: Deploy_WVDHostPool
@@ -230,8 +226,7 @@ stages:
 
                     Invoke-GeneralDeployment @functionInput -Verbose
                   errorActionPreference: stop
-                  azurePowerShellVersion: OtherVersion
-                  preferredAzurePowerShellVersion: 3.5.0
+                  azurePowerShellVersion: LatestVersionVersion
                 enabled: true  
 
   - deployment: Deploy_DesktopAppGroup
@@ -272,8 +267,7 @@ stages:
 
                     Invoke-GeneralDeployment @functionInput -Verbose
                   errorActionPreference: stop
-                  azurePowerShellVersion: OtherVersion
-                  preferredAzurePowerShellVersion: 3.5.0
+                  azurePowerShellVersion: LatestVersionVersion
                 enabled: true
 
   - deployment: Deploy_WVDSessionHosts
@@ -368,8 +362,7 @@ stages:
 
                     Invoke-GeneralDeployment @functionInput -Verbose
                   errorActionPreference: stop
-                  azurePowerShellVersion: OtherVersion
-                  preferredAzurePowerShellVersion: 3.5.0
+                  azurePowerShellVersion: LatestVersionVersion
                 enabled: true 
 
   - deployment: Deploy_Workspace
@@ -409,8 +402,7 @@ stages:
 
                     Invoke-GeneralDeployment @functionInput -Verbose
                   errorActionPreference: stop
-                  azurePowerShellVersion: OtherVersion
-                  preferredAzurePowerShellVersion: 3.5.0
+                  azurePowerShellVersion: LatestVersionVersion
                 enabled: true
 
   - deployment: Deploy_RemoteAppGroup
@@ -451,8 +443,7 @@ stages:
 
                     Invoke-GeneralDeployment @functionInput -Verbose
                   errorActionPreference: stop
-                  azurePowerShellVersion: OtherVersion
-                  preferredAzurePowerShellVersion: 3.5.0
+                  azurePowerShellVersion: LatestVersionVersion
                 enabled: true
 
   - deployment: Deploy_Application
@@ -493,6 +484,5 @@ stages:
 
                     Invoke-GeneralDeployment @functionInput -Verbose
                   errorActionPreference: stop
-                  azurePowerShellVersion: OtherVersion
-                  preferredAzurePowerShellVersion: 3.5.0
+                  azurePowerShellVersion: LatestVersionVersion
                 enabled: true

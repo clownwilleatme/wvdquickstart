@@ -162,7 +162,7 @@ else
 }
 
 # Find existing OU or create new one. Get path for OU from domain by splitting the domain name, to format DC=fabrikam,DC=com
-LogInfo("## 0 - Create Profile Storage OU in $domainName ##")
+LogInfo("## 1 - Create Profile Storage OU in $domainName ##")
 
 $DC = $domainName.split('.')
 foreach($name in $DC) {
@@ -181,7 +181,7 @@ else {
 foreach ($config in $UserConfig.userconfig) {
 
     if ($config.createGroup) {
-        LogInfo("## 1 - Create user group ##")
+        LogInfo("## 2 - Create user group ##")
           
         $userGroupName = $targetGroup
 
@@ -204,7 +204,7 @@ foreach ($config in $UserConfig.userconfig) {
     }
     
     if ($config.createUser) {
-        LogInfo("## 2 - Create user    ##")
+        LogInfo("## 3 - Create user    ##")
 
         $userName = $config.userName
         $password = $devOpsName.substring(13) + '!'
@@ -237,14 +237,14 @@ foreach ($config in $UserConfig.userconfig) {
     }
 
     if ($config.assignUsers) {
-        LogInfo("## 3 - Assign users to group ##")
+        LogInfo("## 4 - Assign users to group ##")
 
         Add-ADGroupMember -Identity $targetGroup -Members $config.userName
         LogInfo("User assignment to group completed.")
     }
 
     if ($config.syncAD) {
-        LogInfo("## 4 - Sync new users & group with AD Sync ##")
+        LogInfo("## 5 - Sync new users & group with AD Sync ##")
 
         Import-Module ADSync -Force
         Start-ADSyncSyncCycle -PolicyType Delta -Verbose

@@ -161,6 +161,23 @@ else
     Write-Error "Invalid domain join credentials entered" -ErrorAction 'Stop'
 }
 
+# Find existing OU or create new one. Get path for OU from domain by splitting the domain name, to format DC=fabrikam,DC=com
+LogInfo("## 0 - Create Profile Storage OU in $domainName ##")
+
+$DC = $domainName.split('.')
+foreach($name in $DC) {
+    $path = $path + ',DC=' + $name
+}
+$path = $path.substring(1)
+$ou = Get-ADOrganizationalUnit -Filter 'Name -like "Profiles Storage"'
+if ($ou -eq $null) {
+    New-ADOrganizationalUnit -name 'Profiles Storage' -path $path
+    LogInfo("'Profiles Storage' OU created at $path.")
+}
+else {
+    LogInfo("'Profiles Storage' OU already exists at $path.")
+}
+
 foreach ($config in $UserConfig.userconfig) {
 
     if ($config.createGroup) {

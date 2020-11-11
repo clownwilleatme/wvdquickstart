@@ -170,7 +170,7 @@ foreach ($config in $azfilesconfig.azfilesconfig) {
             }
             else
             {
-                LogWarning("RUNNING AS ADMIN")
+                LogInfo("Running as admin")
             }
             
             $split = $config.domainName.Split(".")
@@ -178,13 +178,17 @@ foreach ($config in $azfilesconfig.azfilesconfig) {
             $scriptPath = $($PSScriptRoot + "\setup.ps1")
             Set-Location $PSScriptRoot
 
-            #LogInfo("Using PSExec, set execution policy for the admin user")
-            #$scriptBlock = { .\psexec /accepteula -h -u $username -p $domainJoinPassword -c -f "powershell.exe" Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser -Force }
-            #Invoke-Command $scriptBlock -Verbose
+            # Ensure the VM joiner account is a local admin, otherwise the next steps will fail
+            LogInfo("Ensuring $username is a local admin")
+            Add-LocalGroupMember -Group "Administrators" -Member $username
+
+            LogInfo("Using PSExec, set execution policy for the admin user")
+            $scriptBlock = { .\psexec /accepteula -h -u $username -p $domainJoinPassword "powershell.exe" Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser -Force }
+            Invoke-Command $scriptBlock -Verbose
 
             LogInfo("Execution policy for the admin user set. Now joining the storage account through another PSExec command... This command takes roughly 5 minutes")
-            #$scriptBlock = { .\psexec /accepteula -s -h -u $username -p $domainJoinPassword -c -f "powershell.exe" "$scriptPath -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword" }
-            $scriptBlock = { & "$scriptPath" -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword }
+            $scriptBlock = { .\psexec /accepteula -h -u $username -p $domainJoinPassword "powershell.exe" "$scriptPath -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword" }
+            #$scriptBlock = { & "$scriptPath" -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword }
             #LogInfo("DEBUG - $username - $domainJoinPassword - $scriptPath -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword")
             LogInfo("Scriptblock to execute: $scriptBlock")
             Invoke-Command $scriptBlock -Verbose

@@ -46,21 +46,7 @@ Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
 Install-Module -Name PowershellGet -MinimumVersion 2.2.4.1 -Force
 
 Install-Module -Name Az -Force -Verbose
-
 Import-Module -Name AzFilesHybrid -Force -Verbose
-Import-Module -Name activedirectory -Force -Verbose
-
-# Find existing OU or create new one. Get path for OU from domain by splitting the domain name, to format DC=fabrikam,DC=com
-$domain = $U.split('@')[1]
-$DC = $domain.split('.')
-foreach($name in $DC) {
-    $path = $path + ',DC=' + $name
-}
-$path = $path.substring(1)
-$ou = Get-ADOrganizationalUnit -Filter 'Name -like "Profiles Storage"'
-if ($ou -eq $null) {
-    New-ADOrganizationalUnit -name 'Profiles Storage' -path $path
-}
 
 # Connect to Azure
 $Credential = New-Object System.Management.Automation.PsCredential($U, (ConvertTo-SecureString $P -AsPlainText -Force))

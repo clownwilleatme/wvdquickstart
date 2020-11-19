@@ -27,6 +27,18 @@
             },
             "defaultValue": ""
         },
+        "domainControllerVMResourceGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "The resource group containing the existing DC VM."
+            }
+        },
+        "domainControllerVMLocation": {
+            "type": "string",
+            "metadata": {
+                "description": "The DC VM location."
+            }
+        },
         "azureAdminUpn": {
             "type": "string",
             "metadata": {
@@ -99,6 +111,7 @@
         "existingDomainName": "[split(parameters('DomainJoinAccountUPN'), '@')[1]]",
         "identityName": "WVDServicePrincipal",
         "location": "[resourcegroup().location]",
+        "deploymentScriptLocation": "australiaeast",
         "wvdMetadataLocation": "[parameters('wvdMetadataLocation')]",
         "rgName": "[resourcegroup().name]",
         "keyvaultName": "[concat('keyvault', parameters('utcValue'))]",
@@ -280,7 +293,7 @@
                     "type": "jobs",
                     "apiVersion": "2015-01-01-preview",
                     "name": "[variables('jobGuid0')]",
-                    "location": "[resourceGroup().location]",
+                    "location": "[variables('deploymentScriptLocation')]",
                     "dependsOn": [
                         "[concat('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('identityName'))]",
                         "[concat('Microsoft.Automation/automationAccounts/', variables('autoAccountName'))]",
@@ -320,7 +333,7 @@
                     "type": "jobs",
                     "apiVersion": "2015-01-01-preview",
                     "name": "[variables('jobGuid')]",
-                    "location": "[resourceGroup().location]",
+                    "location": "[variables('deploymentScriptLocation')]",
                     "dependsOn": [
                         "[concat('Microsoft.Automation/automationAccounts/', variables('autoAccountName'))]",
                         "[concat('Microsoft.Automation/automationAccounts/', variables('autoAccountName'), '/runbooks/ServicePrincipalRunbook')]",
@@ -360,7 +373,7 @@
                     "type": "jobs",
                     "apiVersion": "2015-01-01-preview",
                     "name": "[variables('jobGuid2')]",
-                    "location": "[resourceGroup().location]",
+                    "location": "[variables('deploymentScriptLocation')]",
                     "dependsOn": [
                         "[concat('Microsoft.Automation/automationAccounts/', variables('autoAccountName'))]",
                         "[concat('Microsoft.Automation/automationAccounts/', variables('autoAccountName'), '/jobs/',variables('jobGuid'))]",
@@ -486,7 +499,7 @@
             "type": "Microsoft.Resources/deploymentScripts",
             "apiVersion": "2019-10-01-preview",
             "name": "createDevopsPipeline",
-            "location": "[variables('location')]",
+            "location": "[variables('deploymentScriptLocation')]",
             "dependsOn": [
                 "[concat('Microsoft.Automation/automationAccounts/', variables('autoAccountName'), '/jobs/', variables('jobGuid2'))]"
             ],
@@ -515,7 +528,7 @@
                 "[concat('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('identityName'))]",
                 "[concat('Microsoft.Automation/automationAccounts/', variables('autoAccountName'), '/jobs/', variables('jobGuid0'))]"
             ],
-            "resourceGroup": "[parameters('virtualNetworkResourceGroupName')]",
+            "resourceGroup": "[parameters('domainControllerVMResourceGroupName')]",
             "subscriptionId": "[subscription().subscriptionId]",
             "condition": "[equals(parameters('identityApproach'), 'AD')]",
             "properties": {
@@ -530,7 +543,7 @@
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "apiVersion": "2019-12-01",
                     "name": "[concat(parameters('domainControllerVMName'),'/', 'userCreation')]",
-                    "location": "[resourcegroup().location]",
+                    "location": "[parameters('domainControllerVMLocation')]",
                     "dependsOn": [
                     ],
                     "properties": {

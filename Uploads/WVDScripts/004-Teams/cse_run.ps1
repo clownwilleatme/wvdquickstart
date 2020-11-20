@@ -119,9 +119,28 @@ function Set-Logger {
 }
 #endregion
 
+function Install-MSI ($file, $logFile, $additionalArgs)
+{
+	$path = Join-Path $PSScriptRoot $file
+	LogInfo("Installing $path")
+
+	if ([string]::IsNullOrEmpty($logFile))
+	{
+		$dataStamp = Get-Date -Format "yyyyMMddTHHmmss"
+		$logFile = '{0}-{1}.log' -f $file, $DataStamp
+	}
+	
+    $arguments = @("/i", ('"{0}"' -f $path), "/qn", "/norestart", "/L*v", $logFile)
+	
+	if ($additionalArgs)
+	{
+		$arguments += $additionalArgs
+	}
+	
+    Start-Process "msiexec.exe" -ArgumentList $arguments -Wait -NoNewWindow
+}
+
 Set-Logger "C:\WindowsAzure\Logs\Plugins\Microsoft.Compute.CustomScriptExtension\executionLog\Teams" # inside "executionCustomScriptExtension_$scriptName_$date.log"
-$MSIPath = "$($PSScriptRoot)\$ExecutableName"
-LogInfo("Installing teams from path $MSIPath")
 
 LogInfo("Setting registry key Teams")
 if ((Test-Path "HKLM:\Software\Microsoft\Teams") -eq $false) {
@@ -130,9 +149,9 @@ if ((Test-Path "HKLM:\Software\Microsoft\Teams") -eq $false) {
 New-ItemProperty "HKLM:\Software\Microsoft\Teams" -Name "IsWVDEnvironment" -Value 1 -PropertyType DWord -Force
 LogInfo("Set IsWVDEnvironment DWord to value 1 successfully.")
 
-$scriptBlock = { msiexec /i $MSIPath /l*v "C:\WindowsAzure\Logs\Plugins\Microsoft.Compute.CustomScriptExtension\executionLog\Teams\InstallLog.txt" ALLUSER=1 ALLUSERS=1 }
-LogInfo("Invoking command with the following scriptblock: $scriptBlock")
-LogInfo("Install logs can be found in the InstallLog.txt file in this folder.")
-Invoke-Command $scriptBlock -Verbose
+#Install-MSI "VC_redist.x64.exe" "C:\WindowsAzure\Logs\Plugins\Microsoft.Compute.CustomScriptExtension\executionLog\Teams\VC_redist_InstallLog.txt"
+Install-MSI "MsRdcWebRTCSvc_HostSetup_1.0.2006.11001_x64.msi" "C:\WindowsAzure\Logs\Plugins\Microsoft.Compute.CustomScriptExtension\executionLog\Teams\MsRdcWebRTCSvc_HostSetup_InstallLog.txt"
+Install-MSI $ExecutableName "C:\WindowsAzure\Logs\Plugins\Microsoft.Compute.CustomScriptExtension\executionLog\Teams\Teams_InstallLog.txt" @("ALLUSER=1", "ALLUSERS=1")
 
+LogInfo("Install logs can be found in the InstallLog.txt file in this folder.")
 LogInfo("Teams was successfully installed")

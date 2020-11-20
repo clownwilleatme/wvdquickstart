@@ -11,6 +11,14 @@
         {
             "Url": "https://teams.microsoft.com/downloads/desktopurl?env=production&plat=windows&arch=x64&managedInstaller=true&download=true",
             "DestinationFilePath": "004-Teams/Teams_windows_x64.msi"
+        },
+        {
+            "Url": "https://aka.ms/vs/16/release/vc_redist.x64.exe",
+            "DestinationFilePath": "004-Teams/Tvc_redist.x64.exe"
+        },
+        {
+            "Url": "https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RE4AQBt",
+            "DestinationFilePath": "004-Teams/MsRdcWebRTCSvc_HostSetup_1.0.2006.11001_x64.msi"
         }
     ]
 }

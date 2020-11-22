@@ -27,7 +27,7 @@
             "value": "[loadBalancerType]"
         },
         "customRdpProperty": {
-            "value": "audiocapturemode:i:1;audiomode:i:0;drivestoredirect:s:;redirectclipboard:i:1;redirectcomports:i:1;redirectprinters:i:1;redirectsmartcards:i:1;screen mode id:i:2;"
+            "value": "audiocapturemode:i:1;audiomode:i:0;drivestoredirect:s:;redirectclipboard:i:1;redirectcomports:i:1;redirectprinters:i:1;redirectsmartcards:i:1;screen mode id:i:2;camerastoredirect:s:*;"
         },
         "vmTemplate": {
             "value": {}

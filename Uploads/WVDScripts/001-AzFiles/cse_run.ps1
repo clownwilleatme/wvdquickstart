@@ -164,15 +164,6 @@ foreach ($config in $azfilesconfig.azfilesconfig) {
             # You can choose to create the identity that represents the storage account as either a Service Logon Account or Computer Account (default parameter value), depends on the AD permission you have and preference. 
             # Run Get-Help Join-AzStorageAccountForAuth for more details on this cmdlet.
 
-            if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
-            {
-                LogWarning("NOT RUNNING AS ADMIN")
-            }
-            else
-            {
-                LogInfo("Running as admin")
-            }
-            
             $split = $config.domainName.Split(".")
             $username = $($split[0] + "\" + $config.domainJoinUsername)
             $scriptPath = $($PSScriptRoot + "\setup.ps1")
@@ -180,7 +171,15 @@ foreach ($config in $azfilesconfig.azfilesconfig) {
 
             # Ensure the VM joiner account is a local admin, otherwise the next steps will fail
             LogInfo("Ensuring $username is a local admin")
-            Add-LocalGroupMember -Group "Administrators" -Member $username
+            
+            try
+            {
+                # Add as local admin, will error if already exists
+                Add-LocalGroupMember -Group "Administrators" -Member $username
+            }
+            catch
+            {
+            }
 
             LogInfo("Using PSExec, set execution policy for the admin user")
             $scriptBlock = { .\psexec /accepteula -h -u $username -p $domainJoinPassword "powershell.exe" Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser -Force }
@@ -188,8 +187,6 @@ foreach ($config in $azfilesconfig.azfilesconfig) {
 
             LogInfo("Execution policy for the admin user set. Now joining the storage account through another PSExec command... This command takes roughly 5 minutes")
             $scriptBlock = { .\psexec /accepteula -h -u $username -p $domainJoinPassword "powershell.exe" "$scriptPath -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword" }
-            #$scriptBlock = { & "$scriptPath" -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword }
-            #LogInfo("DEBUG - $username - $domainJoinPassword - $scriptPath -S $StorageAccountName -RG $ResourceGroupName -U $AzureAdminUpn -P $AzureAdminPassword")
             LogInfo("Scriptblock to execute: $scriptBlock")
             Invoke-Command $scriptBlock -Verbose
 

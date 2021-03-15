@@ -207,7 +207,7 @@ foreach ($config in $UserConfig.userconfig) {
         LogInfo("## 3 - Create user    ##")
 
         $userName = $config.userName
-        $password = $devOpsName.substring(13) + '!'
+        $password = $devOpsName.Substring($devOpsName.Length - 10) + '!'
 
         $existingUser = Get-ADUser -Filter "Name -eq '$($userName)'"
         if($existingUser -ne $null) {

@@ -2,6 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "wvdNamePrefix": {
+            "type": "string",
+            "defaultValue": "WVD",
+            "metadata": {
+                "description": "Prefix used for naming DevOps accounts"
+            }
+        },
         "existingVnetName": {
             "type": "string",
             "metadata": {
@@ -122,8 +129,8 @@
         "jobGuid0": "[guid(toLower(uniquestring(variables('identityName'), resourceGroup().id, parameters('utcValue'),'credentials')))]",
         "jobGuid": "[guid(toLower(uniquestring(variables('identityName'), resourceGroup().id, parameters('utcValue'),variables('autoAccountName'))))]",
         "jobGuid2": "[guid(toLower(uniquestring(variables('identityName'), subscription().id, parameters('utcValue'),'devOpsSetup')))]",
-        "devOpsName": "[concat('WVDQuickStartOrg', skip(parameters('utcValue'), 9))]",   
-        "devOpsProjectName": "[concat('WVDQuickStartProj', skip(parameters('utcValue'), 9))]",
+        "devOpsName": "[concat(parameters('wvdNamePrefix'), 'Org', skip(parameters('utcValue'), 9))]",   
+        "devOpsProjectName": "[concat(parameters('wvdNamePrefix'), 'Proj', skip(parameters('utcValue'), 9))]",
         "targetGroup": "WVDTestUsers",
         "automationVariables": [
             {

@@ -198,16 +198,6 @@ else {
     Throw
 }
 
-$url = "169.254.169.254"
-$var = test-netconnection $url -port 80
-if ($var.TcpTestSucceeded) {
-Write-Output "$url is reachable."
-} 
-else {
-    Write-Output "$url cannot be reached."   
-    Throw
-}
-
 Write-Output ('End verification.')
 #endregion
 

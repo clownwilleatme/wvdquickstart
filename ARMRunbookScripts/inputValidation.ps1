@@ -13,6 +13,7 @@ Additionally, this script assigns the subscription Contributor role to the WVDSe
 
 #Initializing variables from automation account
 $SubscriptionId = Get-AutomationVariable -Name 'subscriptionid'
+$appName = Get-AutomationVariable -Name 'AppName'
 $ResourceGroupName = Get-AutomationVariable -Name 'ResourceGroupName'
 $fileURI = Get-AutomationVariable -Name 'fileURI'
 $existingVnetName = Get-AutomationVariable -Name 'existingVnetName'
@@ -203,7 +204,7 @@ Write-Output ('End verification.')
 
 # Grant managed identity contributor role on subscription level
 
-$identity = Get-AzUserAssignedIdentity -ResourceGroupName $ResourceGroupName -Name "WVDServicePrincipal"
+$identity = Get-AzUserAssignedIdentity -ResourceGroupName $ResourceGroupName -Name $appName
 New-AzRoleAssignment -RoleDefinitionName "Contributor" -ObjectId $identity.PrincipalId -Scope "/subscriptions/$subscriptionId"
 Start-Sleep -Seconds 5
 

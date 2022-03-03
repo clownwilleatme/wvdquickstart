@@ -30,11 +30,12 @@ $ConfigurationFileName = "users.parameters.json"
 # Parameters below are passed by the main ARM template
 $domainName = $args[0]
 $targetGroup = $args[1]
-$artifactsLocation = $args[2]
-$domainUsername = $args[3]
-$domainPassword = $args[4]
-$devOpsName = $args[5]
-$aadSyncVm = $args[6]
+$groupPath = $args[2]
+$artifactsLocation = $args[3]
+$domainUsername = $args[4]
+$domainPassword = $args[5]
+$devOpsName = $args[6]
+$aadSyncVm = $args[7]
 #####################################
 
 ##########
@@ -195,7 +196,8 @@ foreach ($config in $UserConfig.userconfig) {
             -Name "$userGroupName" `
             -DisplayName "$userGroupName" `
             -GroupScope "Global" `
-            -GroupCategory "Security" -Verbose
+            -GroupCategory "Security" `
+            -Path $groupPath -Verbose
         }
         else {
             LogInfo("User group $userGroupName already exists, using that existing group.")

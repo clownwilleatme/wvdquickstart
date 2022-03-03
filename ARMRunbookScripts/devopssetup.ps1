@@ -113,7 +113,7 @@ write-output $url
 $body = @"
 {
   "name": "$($projectName)",
-  "description": "WVD QuickStart",
+  "description": "AVD QuickStart",
   "capabilities": {
     "versioncontrol": {
       "sourceControlType": "Git"

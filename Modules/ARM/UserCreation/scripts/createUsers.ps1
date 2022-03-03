@@ -34,6 +34,7 @@ $artifactsLocation = $args[2]
 $domainUsername = $args[3]
 $domainPassword = $args[4]
 $devOpsName = $args[5]
+$aadSyncVm = $args[6]
 #####################################
 
 ##########
@@ -246,7 +247,17 @@ foreach ($config in $UserConfig.userconfig) {
     if ($config.syncAD) {
         LogInfo("## 5 - Sync new users & group with AD Sync ##")
 
-        Import-Module ADSync -Force
-        Start-ADSyncSyncCycle -PolicyType Delta -Verbose
+        if ([string]::IsNullOrEmpty($aadSyncVm))
+        {
+            Import-Module ADSync -Force
+            Start-ADSyncSyncCycle -PolicyType Delta -Verbose
+        }
+        else
+        {
+            Invoke-Command $aadSyncVm {
+                Import-Module ADSync -Force
+                Start-ADSyncSyncCycle -PolicyType Delta -Verbose
+            }
+        }
     }
 }

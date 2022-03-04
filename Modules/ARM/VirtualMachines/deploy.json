@@ -926,7 +926,7 @@
                     "ultraSSDEnabled": "[parameters('ultraSSDEnabled')]"
                 },
                 "osProfile": {
-                    "computerName": "[variables('vmNames')[copyIndex()]]",
+                    "computerName": "[if(startsWith(toLower(variables('vmNames')[copyIndex()]), 'vm-'), substring(variables('vmNames')[copyIndex()], 3), variables('vmNames')[copyIndex()])]",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]",
                     "customData": "[if(empty(parameters('customData')), json('null'), base64(parameters('customData')))]",

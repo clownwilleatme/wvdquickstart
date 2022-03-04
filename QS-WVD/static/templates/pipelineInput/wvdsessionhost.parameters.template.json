@@ -6,10 +6,10 @@
             "value": "[vmNamePrefix]"
         },
         "vmNumberOfInstances": {
-            "value": 2
+            "value": "[vmNumberOfInstances]"
         },
         "vmInitialNumber": {
-            "value": 1
+            "value": "[vmInitialNumber]"
         },
         "vmSize": {
             "value": "[vmSize]"

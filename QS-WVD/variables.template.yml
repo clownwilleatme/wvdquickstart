@@ -74,13 +74,13 @@ variables:
   value: "office-365"
 
 - name: sku
-  value: "20h1-evd-o365pp"
+  value: "21h1-evd-o365pp-g2"
   
 - name: version
   value: "latest"
 
 - name: HostPoolName
-  value: "QS-WVD-HP"
+  value: "hp-avd-qs"
   
 - name: profilesStorageAccountName
   value: "[profilesStorageAccountName]"

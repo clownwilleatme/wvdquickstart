@@ -1,0 +1,82 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vmNamePrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "The prefix for the AVD host pool VMs."
+      }
+    },
+    "vmNumberOfInstances": {
+      "type": "int",
+      "defaultValue": 1,
+      "maxValue": 800,
+      "minValue": 1,
+      "metadata": {
+        "description": "The number of AVD host pool VMs that were deployed."
+      }
+    },
+    "vmInitialNumber": {
+      "type": "int",
+      "defaultValue": 1,
+      "metadata": {
+        "description": "The initial starting number for the AVD host pool VMs that were deployed."
+      }
+    },
+    "location": {
+      "type": "string"
+    },
+    "extensionPublisher": {
+      "type": "string"
+    },
+    "extensionType": {
+      "type": "string"
+    },
+    "extensionTypeHandlerVersion": {
+      "type": "string"
+    },
+    "autoUpgradeMinorVersion": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "settings": {
+      "type": "object",
+      "defaultValue": {}
+    },
+    "protectedSettings": {
+      "type": "object",
+      "defaultValue": {}
+    }
+  },
+  "variables": {
+    "copy": [
+      {
+        "name": "vmNames",
+        "count": "[length(range(0, parameters('vmNumberOfInstances')))]",
+        "input": "[format('{0}{1}', parameters('vmNamePrefix'), padLeft(add(range(0, parameters('vmNumberOfInstances'))[copyIndex('vmNames')], parameters('vmInitialNumber')), 3, '0'))]"
+      }
+    ],
+    "extensionCleanName": "[replace(parameters('extensionPublisher'), '.', '')]"
+  },
+  "resources": [
+    {
+      "copy": {
+        "name": "vmExtension",
+        "count": "[length(variables('vmNames'))]"
+      },
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2015-06-15",
+      "name": "[format('{0}/{1}', variables('vmNames')[copyIndex()], variables('extensionCleanName'))]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "publisher": "[parameters('extensionPublisher')]",
+        "type": "[parameters('extensionType')]",
+        "typeHandlerVersion": "[parameters('extensionTypeHandlerVersion')]",
+        "autoUpgradeMinorVersion": "[parameters('autoUpgradeMinorVersion')]",
+        "settings": "[parameters('settings')]",
+        "protectedSettings": "[parameters('protectedSettings')]"
+      }
+    }
+  ]
+}

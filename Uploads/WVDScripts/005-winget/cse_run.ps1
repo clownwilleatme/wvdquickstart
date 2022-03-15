@@ -144,6 +144,19 @@ function Install-WinGet
     }
 }
 
+function Remove-WinGet
+{
+    $oldAppPackage = Get-AppPackage -Name "Microsoft.DesktopAppInstaller"
+
+    if ($null -ne $oldAppPackage)
+    {
+        LogInfo("Removing old version of DesktopAppInstaller - $($oldAppPackage.Version)")
+        Remove-AppPackage $oldAppPackage
+    }
+}
+
+# Remove any version if already installed
+Remove-WinGet
 Install-WinGet
 
 if (-not (Test-WinGet))

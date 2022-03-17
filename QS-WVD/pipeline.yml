@@ -349,7 +349,8 @@ stages:
 
                     $storageAccount = Get-AzResource -Name $(profilesStorageAccountName) -ResourceType 'Microsoft.Storage/storageAccounts'
                     $SASKey = (Get-AzStorageAccountKey -AccountName $storageAccount.Name -ResourceGroupName $storageAccount.ResourceGroupName)[0]                    
-                    $windowsScriptExtensionCommandToExecute = 'powershell -ExecutionPolicy Unrestricted -Command "& .\scriptExtensionMasterInstaller.ps1 -AzureAdminUpn $(azureAdminUpn) -AzureAdminPassword $(azureAdminPassword) -domainJoinPassword $(domainJoinPassword) -Dynparameters @{storageaccountkey=\"'+ $($SASKey.Value) +'\"}"'
+                    $dynParamString = '@{storageaccountkey=\"' + $($SASKey.Value) + '\";domainJoinUser=\"$(domainJoinUserName)\";domainName=\"$(domainName)\"}'
+                    $windowsScriptExtensionCommandToExecute = 'powershell -ExecutionPolicy Unrestricted -Command "& .\scriptExtensionMasterInstaller.ps1 -AzureAdminUpn $(azureAdminUpn) -AzureAdminPassword $(azureAdminPassword) -domainJoinPassword $(domainJoinPassword) -Dynparameters ' + $dynParamString + '"'
                     $windowsScriptExtensionCommandToExecute = ConvertTo-SecureString -String $windowsScriptExtensionCommandToExecute -AsPlainText -Force
                     
                     $parameterObjects += @{

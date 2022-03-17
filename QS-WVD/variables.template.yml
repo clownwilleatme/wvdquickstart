@@ -40,6 +40,9 @@ variables:
 - name: domainJoinUserName
   value: "[adminUsername]"
 
+- name: domainName
+  value: "[domainName]"
+  
 ### Storage Account ###
 - name: wvdAssetsStorage
   value: "[wvdAssetsStorage]"

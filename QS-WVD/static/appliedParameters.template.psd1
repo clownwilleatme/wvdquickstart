@@ -28,7 +28,7 @@
 
     # Host pool related #
     # ================== #
-    hostpoolName                          = "hp-avd-qs"                         # Name of the WVD host pool
+    hostpoolName                          = "hp-avd"                            # Name of the WVD host pool
     hostpoolType                          = "Pooled"                            # Type of host pool, can be "Personal" or "Pooled" (default)
     maxSessionLimit                       = 16                                  # default
     loadBalancerType                      = "BreadthFirst"                      # Load-balancing algorithm
@@ -50,15 +50,24 @@
 
     # App group related #
     # ================== #
-    appGroupName                          = "rag-avd-qs"                        # Remote app group name
-    DesktopAppGroupName                   = "dag-avd-qs"                        # Desktop app group name
+    appGroupName                          = "rag-avd"                           # Remote app group name
+    DesktopAppGroupName                   = "dag-avd"                           # Desktop app group name
     targetGroup                           = "[targetGroup]"                     # Name of the user group to be assigned to the WVD environment. Only change to an existing group as group is created only in the initial ARM deployment.
     principalIds                          = "[principalIds]"                    # principal ID of the above test user group
-    workSpaceName                         = "ws-avd-qs"                         # Name of the WVD workspace
+    workSpaceName                         = "ws-avd"                            # Name of the WVD workspace
     workspaceFriendlyName                 = "AVD Workspace"                     # User-facing friendly name of the above workspace
     ######################
 
     # Imaging related #
+    # ================ #
+    osType                                = "Windows"                           # default
+    publisher                             = "microsoftwindowsdesktop"           # default
+    offer                                 = "office-365"                        # This image includes Office 365
+    sku                                   = "win11-22h2-avd-m365"                # Points to Windows 10 Enterprise Multi-Session, build 2004
+    imageVersion                          = "latest"                            # default
+    ######################
+
+    # Imaging related - custom imaging - not currently used #
     # ================ #
     imagingResourceGroupName              = "QS-WVD-IMG-RG"                     # [Not used, can be used for custom imaging]
     imageTemplateName                     = "QS-WVD-ImageTemplate"              # [Not used, can be used for custom imaging]
@@ -66,11 +75,7 @@
     sigGalleryName                        = "[sigGalleryName]"                  # [Not used, can be used for custom imaging]
     sigImageDefinitionId                  = "<sigImageDefinitionId>"            # [Not used, can be used for custom imaging]
     imageDefinitionName                   = "W10-20H1-O365"                     # [Not used, can be used for custom imaging]
-    osType                                = "Windows"                           # default
-    publisher                             = "microsoftwindowsdesktop"           # default
-    offer                                 = "office-365"                        # This image includes Office 365
-    sku                                   = "21h1-evd-o365pp-g2"                # Points to Windows 10 Enterprise Multi-Session, build 2004
-    imageVersion                          = "latest"                            # default
+
     ######################
 
     # Authentication related

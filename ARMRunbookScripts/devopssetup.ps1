@@ -40,6 +40,8 @@ $AutomationAccountName = Get-AutomationVariable -Name 'AccountName'
 $identityApproach = Get-AutomationVariable -Name 'identityApproach'
 $notificationEmail = Get-AutomationVariable -Name 'notificationEmail'
 $tags = Get-AutomationVariable -Name 'tags'
+$cwControlUrl = Get-AutomationVariable -Name 'cwControlUrl'
+$cwControlCompany = Get-AutomationVariable -Name 'cwControlCompany'
 
 # Download files required for this script from github ARMRunbookScripts/static folder
 $FileNames = "msft-wvd-saas-api.zip,msft-wvd-saas-web.zip,AzureModules.zip"
@@ -299,6 +301,7 @@ $content = $content.Replace("[profilesStorageAccountName]", $profilesStorageAcco
 $content = $content.Replace("[autoAccountName]", $AutomationAccountName)
 $content = $content.Replace("[identityApproach]", $identityApproach)
 $content = $content.Replace('"', '')
+$content = $content.Replace("[wvdMetadataLocation]", $wvdMetadataLocation)
 write-output $content
 
 $downloadUrl = $($fileUri + "/QS-WVD/static/appliedParameters.template.psd1")
@@ -316,7 +319,6 @@ $parameters = $parameters.Replace("[objectId]", $ObjectId)
 $parameters = $parameters.Replace("[tenantId]", $tenant)
 $parameters = $parameters.Replace("[subscriptionId]", $subscriptionId)
 $parameters = $parameters.Replace("[location]", $location)
-$content = $content.Replace("[wvdMetadataLocation]", $wvdMetadataLocation)
 $parameters = $parameters.Replace("[adminUsername]", $adminUsername)
 $parameters = $parameters.Replace("[domainName]", $domainName)
 $parameters = $parameters.Replace("[keyVaultName]", $keyvaultName)
@@ -327,6 +329,8 @@ $parameters = $parameters.Replace("[principalIds]", $principalIds)
 $parameters = $parameters.Replace("[targetGroup]", $targetGroup)
 $parameters = $parameters.Replace("[identityApproach]", $identityApproach)
 $parameters = $parameters.Replace("[tags]", $tags)
+$parameters = $parameters.Replace("[cwControlUrl]", $cwControlUrl)
+$parameters = $parameters.Replace("[cwControlCompany]", $cwControlCompany)
 $parameters = $parameters.Replace('"', "'")
 write-output $parameters
 

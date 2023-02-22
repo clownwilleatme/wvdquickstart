@@ -62,6 +62,13 @@ stages:
                   Contents: '**'
                   TargetFolder: '$(Pipeline.Workspace)'
                   OverWrite: true
+              - task: CopyFiles@2
+                name: Copy_CWControl_parameters
+                inputs:
+                  SourceFolder: '$(Build.Repository.LocalPath)/QS-WVD/Parameters'
+                  Contents: 'cwcontrol.parameters.json'
+                  TargetFolder: '$(Pipeline.Workspace)/s/Uploads/WVDScripts/003-CWControl'
+                  OverWrite: true
               - task: PublishPipelineArtifact@1
                 name: Publish_Deployment_Files
                 inputs:

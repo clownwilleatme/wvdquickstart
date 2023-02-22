@@ -40,12 +40,21 @@
     vmDiskType                            = "Premium_LRS"                       # SKU of the above disk
     domainJoinUser                        = "[DomainJoinAccountUPN]"            # The domain join account UPN
     domainName                            = "[existingDomainName]"              # domain for the VMs to join, taken from domainJoinUser
+    domainJoinOU                          = ""                                  # OU for the new session host VMs, e.g. OU=AVD,OU=Computers,OU=Company,DC=domain,DC=com,DC=au' 
     adminUsername                         = "[existingDomainUsername]"          # domain controller admin username, taken from domainJoinUser
     computerName                          = "[computerName]"                    # The name of the VM with the domain controller on it. Required only when using AD Identity Approach.
     vnetName                              = "[existingVnetName]"                # Name of the virtual network with the domain controller
     vnetResourceGroupName                 = "[virtualNetworkResourceGroupName]" # Name of the resource group with the domain controller VM and VNET in it
     subnetName                            = "[existingSubnetName]"              # Name of the subnet for the VMs to join
     enablePersistentDesktop               = $false                              # WVD setting
+    ###################
+
+    # CW Control config #
+    # ================== #
+    cwControlUrl                          = "[cwControlUrl]"
+    cwControlPort                         = 443
+    cwControlCompany                      = "[cwControlCompany]"
+
     ######################
 
     # App group related #

@@ -1,0 +1,9 @@
+{
+    "cwControl": [
+        {
+            "url": "[cwControlUrl]",
+            "port": 443,
+            "company": "[cwControlCompany]"
+        }
+    ]
+}

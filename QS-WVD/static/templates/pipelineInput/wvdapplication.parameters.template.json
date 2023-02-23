@@ -5,25 +5,113 @@
         "applications": {
             "value": [
                 {
-                    "name": "NotepadPP",
-                    "description": "Notepad++ by ARM template",
-                    "friendlyName": "NotepadPP",
-                    "filePath": "C:\\Program Files (x86)\\Notepad++\\Notepad++.exe",
+                    "name": "Edge",
+                    "description": "Edge",
+                    "friendlyName": "Edge",
+                    "filePath": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
                     "commandLineSetting": "DoNotAllow",
                     "commandLineArguments": "",
                     "showInPortal": true,
-                    "iconPath": "C:\\Program Files (x86)\\Notepad++\\Notepad++.exe",
+                    "iconPath": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
                     "iconIndex": 0
                 },
                 {
-                    "name": "Microsoft Teams",
-                    "description": "Microsoft Teams by ARM template",
-                    "friendlyName": "Microsoft Teams",
-                    "filePath": "C:\\Program Files (x86)\\Teams Installer\\Teams.exe",
+                    "name": "Excel",
+                    "description": "Excel",
+                    "friendlyName": "Excel",
+                    "filePath": "C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE",
                     "commandLineSetting": "DoNotAllow",
                     "commandLineArguments": "",
                     "showInPortal": true,
-                    "iconPath": "C:\\Program Files (x86)\\Teams Installer\\Teams.exe",
+                    "iconPath": "C:\\Program Files\\Microsoft Office\\Root\\VFS\\Windows\\Installer\\{90160000-000F-0000-1000-0000000FF1CE}\\xlicons.exe",
+                    "iconIndex": 0
+                },
+                {
+                    "name": "Teams",
+                    "description": "Teams",
+                    "friendlyName": "Teams",
+                    "filePath": "C:\\Program Files (x86)\\Microsoft\\Teams\\current\\Teams.exe",
+                    "commandLineSetting": "DoNotAllow",
+                    "commandLineArguments": "",
+                    "showInPortal": true,
+                    "iconPath": "C:\\Program Files (x86)\\Microsoft\\Teams\\current\\Teams.exe",
+                    "iconIndex": 0
+                },
+                {
+                    "name": "OneNote",
+                    "description": "OneNote",
+                    "friendlyName": "OneNote",
+                    "filePath": "C:\\Program Files\\Microsoft Office\\root\\Office16\\ONENOTE.EXE",
+                    "commandLineSetting": "DoNotAllow",
+                    "commandLineArguments": "",
+                    "showInPortal": true,
+                    "iconPath": "C:\\Program Files\\Microsoft Office\\Root\\VFS\\Windows\\Installer\\{90160000-000F-0000-1000-0000000FF1CE}\\joticon.exe",
+                    "iconIndex": 0
+                },
+                {
+                    "name": "Outlook",
+                    "description": "Outlook",
+                    "friendlyName": "Outlook",
+                    "filePath": "C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE",
+                    "commandLineSetting": "DoNotAllow",
+                    "commandLineArguments": "",
+                    "showInPortal": true,
+                    "iconPath": "C:\\Program Files\\Microsoft Office\\Root\\VFS\\Windows\\Installer\\{90160000-000F-0000-1000-0000000FF1CE}\\outicon.exe",
+                    "iconIndex": 0
+                },
+                {
+                    "name": "PowerPoint",
+                    "description": "PowerPoint",
+                    "friendlyName": "PowerPoint",
+                    "filePath": "C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.EXE",
+                    "commandLineSetting": "DoNotAllow",
+                    "commandLineArguments": "",
+                    "showInPortal": true,
+                    "iconPath": "C:\\Program Files\\Microsoft Office\\Root\\VFS\\Windows\\Installer\\{90160000-000F-0000-1000-0000000FF1CE}\\pptico.exe",
+                    "iconIndex": 0
+                },
+                {
+                    "name": "Word",
+                    "description": "Word",
+                    "friendlyName": "Word",
+                    "filePath": "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
+                    "commandLineSetting": "DoNotAllow",
+                    "commandLineArguments": "",
+                    "showInPortal": true,
+                    "iconPath": "C:\\Program Files\\Microsoft Office\\Root\\VFS\\Windows\\Installer\\{90160000-000F-0000-1000-0000000FF1CE}\\wordicon.exe",
+                    "iconIndex": 0
+                },
+                {
+                    "name": "Connection Experience Indicator",
+                    "description": "Connection Experience Indicator",
+                    "friendlyName": "Connection Experience Indicator",
+                    "filePath": "C:\\Program Files (x86)\\Connection Experience Indicator\\ExperienceIndicator.exe",
+                    "commandLineSetting": "DoNotAllow",
+                    "commandLineArguments": "",
+                    "showInPortal": true,
+                    "iconPath": "C:\\Program Files (x86)\\Connection Experience Indicator\\ExperienceIndicator.exe",
+                    "iconIndex": 0
+                },
+                {
+                    "name": "FSLogix Profile Status",
+                    "description": "FSLogix Profile Status",
+                    "friendlyName": "FSLogix Profile Status",
+                    "filePath": "C:\\Program Files\\FSLogix\\Apps\\frxtray.exe",
+                    "commandLineSetting": "DoNotAllow",
+                    "commandLineArguments": "",
+                    "showInPortal": true,
+                    "iconPath": "C:\\Program Files\\FSLogix\\Apps\\frxtray.exe",
+                    "iconIndex": 0
+                },
+                {
+                    "name": "Log Off",
+                    "description": "Log Off",
+                    "friendlyName": "Log Off",
+                    "filePath": "C:\\Windows\\System32\\logoff.exe",
+                    "commandLineSetting": "DoNotAllow",
+                    "commandLineArguments": "",
+                    "showInPortal": true,
+                    "iconPath": "C:\\Program Files (x86)\\Connection Experience Indicator\\Shutdown.png",
                     "iconIndex": 0
                 }
             ]

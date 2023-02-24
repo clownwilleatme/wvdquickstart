@@ -7,7 +7,7 @@
             "ResourceGroupName": "[resourceGroupName]",
             "StorageAccountName": "[profilesStorageAccountName]",
             "domainName": "[domainName]",
-            "domainJoinUsername": "[adminUsername]"
+            "domainJoinUsername": "[domainJoinUser]"
         }
     ]
 }

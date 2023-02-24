@@ -165,7 +165,8 @@ foreach ($config in $azfilesconfig.azfilesconfig) {
             # Run Get-Help Join-AzStorageAccountForAuth for more details on this cmdlet.
 
             $domain = $config.domainName
-            $username = $($domain + "\" + $config.domainJoinUsername)
+            $domainUserName = @($config.domainJoinUsername -split '@')[0]
+            $username = $($domain + "\" + $domainUserName)
             $scriptPath = $($PSScriptRoot + "\setup.ps1")
             Set-Location $PSScriptRoot
 

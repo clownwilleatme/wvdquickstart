@@ -15,8 +15,21 @@
                     "Value": "\\\\[profilesStorageAccountName].file.core.windows.net\\[profilesShareName]"
                 }
             ],
+            "officeProfileContainerKeys": [
+                {
+                    "Name": "Enabled",
+                    "Type": "DWORD",
+                    "Value": "1"
+                },
+                {
+                    "Name": "VHDLocations",
+                    "Type": "MultiString",
+                    "Value": "\\\\[profilesStorageAccountName].file.core.windows.net\\o365profiles"
+                }
+            ],
             "NTFSPermission": true,
             "fileShareName": "[profilesShareName]",
+            "officeFileShareName": "o365profiles",
             "fileShareStorageAccountName": "[profilesStorageAccountName]",
             "domain": "[domainName]",
             "targetGroup": "[targetGroup]"

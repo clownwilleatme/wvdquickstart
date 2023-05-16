@@ -2,7 +2,7 @@
     "fslogix": [
         {
             "installFSLogix": true,
-            "configureFSLogix": true,
+            "configureFSLogix": false,
             "profileContainerKeys": [
                 {
                     "Name": "Enabled",

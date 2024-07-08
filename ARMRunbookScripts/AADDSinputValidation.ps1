@@ -42,6 +42,9 @@ Set-ExecutionPolicy -ExecutionPolicy Undefined -Scope Process -Force -Confirm:$f
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope LocalMachine -Force -Confirm:$false
 Get-ExecutionPolicy -List
 
+# 2024-07-08 - to fix issue introduced here https://github.com/Azure/azure-powershell/issues/24967
+Update-AzConfig -EnableLoginByWam $false
+
 #The name of the Automation Credential Asset this runbook will use to authenticate to Azure.
 $AzCredentialsAsset = 'AzureCredentials'
 
